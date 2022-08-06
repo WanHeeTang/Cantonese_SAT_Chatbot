@@ -1,0 +1,16 @@
+# file
+view/node_modules
+model/migrations
+# model/BestBERTEmotion
+model/Double fine-tune
+model/emotion_data
+model/EmpathyResponse
+model/Final modelmodel/MergeBertEmpathy1
+model/SATbot
+# *.pt
+.vscode
+*.pyc
+*.pyo
+./model
+./graphs
+/view/public/personas_photos
