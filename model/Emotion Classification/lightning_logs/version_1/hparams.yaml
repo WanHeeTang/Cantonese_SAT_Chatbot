@@ -1,0 +1,24 @@
+accumulate_grad_batches: 1
+batch_size: 16
+epochs: 1
+lr: !!python/object/apply:numpy.core.multiarray.scalar
+- !!python/object/apply:numpy.dtype
+  args:
+  - f8
+  - false
+  - true
+  state: !!python/tuple
+  - 3
+  - <
+  - null
+  - null
+  - null
+  - -1
+  - -1
+  - 0
+- !!binary |
+  mpmZmZmZuT8=
+test_path: /home/wanhee/SATbot2.0/model/emotion_data/my_test.csv
+train_path: /home/wanhee/SATbot2.0/model/emotion_data/Copy of my_train.csv
+val_path: /home/wanhee/SATbot2.0/model/emotion_data/my_val.csv
+warmup_steps: 100

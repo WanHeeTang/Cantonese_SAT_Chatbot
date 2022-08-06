@@ -1,16 +1,11 @@
 # file
 view/node_modules
 model/migrations
-# model/BestBERTEmotion
-model/Double fine-tune
-model/emotion_data
-model/EmpathyResponse
-model/Final modelmodel/MergeBertEmpathy1
 model/SATbot
 # *.pt
 .vscode
 *.pyc
 *.pyo
-./model
-./graphs
 /view/public/personas_photos
+/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/lightning_logs
+/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Emotion Classification/lightning_logs
