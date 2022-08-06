@@ -11,15 +11,11 @@ nltk.download("stopwords")
 from nltk.corpus import stopwords
 
 from transformers import (
-    T5ForConditionalGeneration,
-    T5Tokenizer,
     GPT2Tokenizer,
     GPT2LMHeadModel
 )
 
 from transformers import (
-    T5ForConditionalGeneration,
-    T5Tokenizer,
     GPT2Tokenizer,
     GPT2LMHeadModel,
     AutoModelWithLMHead,
@@ -32,42 +28,23 @@ from tokenizers.processors import BertProcessing
 from transformers import BertTokenizer, BertForSequenceClassification
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, XLNetForSequenceClassification
 
-model2 = BertForSequenceClassification.from_pretrained('/home/wanhee/SATbot2.0/model/BestBERTEmotion')
-tokenizer2 = AutoTokenizer.from_pretrained('bert-base-chinese')
+emo_model = BertForSequenceClassification.from_pretrained('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Emotion Classification/BestBERTEmotion')
+emo_tokenizer = AutoTokenizer.from_pretrained('bert-base-chinese')
 
-# model2 = BertForSequenceClassification.from_pretrained('/home/wanhee/SATbot2.0/model/Final Model')
-# tokenizer2 = BertTokenizer.from_pretrained('bert-base-chinese')
-
-EmpModel = BertForSequenceClassification.from_pretrained("/home/wanhee/SATbot2.0/model/MergeBertEmpathy1", num_labels=3)
+emp_model = BertForSequenceClassification.from_pretrained("/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Empathy Classification/MergeBertEmpathy1", num_labels=3)
 Emptokenizer = AutoTokenizer.from_pretrained('bert-base-chinese')
 
 
-# args_dict = dict(
-#     model_name_or_path='t5-small',
-#     tokenizer_name_or_path='t5-small',
-# )
-
-# args_dict = dict(cd Ssxssx
-#     # Huggingface model
-#     model_name_or_path='/home/wanhee/SATbot2.0/model/Final Model',
-#     tokenizer_name_or_path='bert-base-chinese',
-# )
-
-# args = argparse.Namespace(**args_dict)
-
-
-#load emotion classifier (T5 small)
+#load emotion classifier (BestBERTEmotion.pt)
 with torch.no_grad():
-    # emo_model = T5FineTuner(args)
-    model2.to(torch.device('cpu'))
-    # model2.load_state_dict(torch.load('/home/wanhee/SATbot2.0/model/emotion_data/BestXLNetEmotion/BestXLNet.pt', map_location=torch.device('cpu')), strict=False)
-    model2.load_state_dict(torch.load('/home/wanhee/SATbot2.0/model/BestBERTEmotion/BestBERTEmotion.pt', map_location=torch.device('cpu')), strict=False)
+    emo_model.to(torch.device('cpu'))
+    emo_model.load_state_dict(torch.load('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Emotion Classification/BestBERTEmotion/BestBERTEmotion.pt', map_location=torch.device('cpu')), strict=False)
 
 
-#load empathy classifier (T5 small)
+#load empathy classifier (BestBERTEmoathy.pt)
 with torch.no_grad():
-    EmpModel.to(torch.device('cpu'))
-    EmpModel.load_state_dict(torch.load('/home/wanhee/SATbot2.0/model/MergeBertEmpathy1/BestBERTEmpathy.pt', map_location=torch.device('cpu')), strict=False)
+    emp_model.to(torch.device('cpu'))
+    emp_model.load_state_dict(torch.load('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Empathy Classification/MergeBertEmpathy1/BestBERTEmpathy.pt', map_location=torch.device('cpu')), strict=False)
     
 
 #Load pre-trained GPT2 language model weights
@@ -84,15 +61,13 @@ stemmer = nltk.stem.PorterStemmer()
 
 
 def get_emotion(text):
-    # ----- 3. Predict -----#
-    # text = "今日心情好正"
-    X_test_tokenized = tokenizer2(text, padding=True, truncation=True, max_length=512)
+    X_test_tokenized = emo_tokenizer(text, padding=True, truncation=True, max_length=512)
 
     b_input_ids= torch.tensor(X_test_tokenized['input_ids']).unsqueeze(0)
     b_attention_mask = torch.tensor(X_test_tokenized['attention_mask']).unsqueeze(0)
 
     with torch.no_grad():
-        outputs = model2(b_input_ids, token_type_ids=None, attention_mask=b_attention_mask)
+        outputs = emo_model(b_input_ids, token_type_ids=None, attention_mask=b_attention_mask)
 
     logits = outputs[0]
     print(logits)
@@ -126,7 +101,7 @@ def empathy_score(text):
   Emp_attention_mask = torch.tensor(Emp_test_tokenized['attention_mask']).unsqueeze(0)
 
   with torch.no_grad():
-    Emp_outputs = EmpModel(Emp_input_ids, token_type_ids=None, attention_mask=Emp_attention_mask)
+    Emp_outputs = emp_model(Emp_input_ids, token_type_ids=None, attention_mask=Emp_attention_mask)
 
   Emp_logits = Emp_outputs[0]
   print(Emp_logits)
@@ -238,5 +213,4 @@ def get_sentence_score(sentence, dataframe):
   fluency = fluency_score(sentence)
   novelty = novelty_score(sentence, dataframe)
   score = empathy + 0.75*fluency + 2*novelty
-  # score = 0.75*fluency + 2*novelty
   return score
