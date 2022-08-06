@@ -7,5 +7,5 @@ model/SATbot
 *.pyc
 *.pyo
 /view/public/personas_photos
-/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/lightning_logs
-/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Emotion Classification/lightning_logs
+/model/lightning_logs
+/model/Emotion Classification/lightning_logs
