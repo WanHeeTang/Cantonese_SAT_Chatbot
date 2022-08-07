@@ -17,11 +17,11 @@ from nltk.corpus import wordnet  # noqa
 class ModelDecisionMaker:
     def __init__(self):
 
-        self.neutral = pd.read_csv('/home/wanhee/SATbot2.0/model/neutral.csv', encoding='utf-8') #change path #ISO-8859-1
-        self.old_man = pd.read_csv('/home/wanhee/SATbot2.0/model/old_man.csv', encoding='utf-8')
-        self.old_lady = pd.read_csv('/home/wanhee/SATbot2.0/model/old_lady.csv', encoding='utf-8')
-        self.young_man = pd.read_csv('/home/wanhee/SATbot2.0/model/young_man.csv', encoding='utf-8')
-        self.young_lady = pd.read_csv('/home/wanhee/SATbot2.0/model/young_lady.csv', encoding='utf-8')
+        self.neutral = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/neutral.csv', encoding='utf-8')
+        self.old_man = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/old_man.csv', encoding='utf-8')
+        self.old_lady = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/old_lady.csv', encoding='utf-8')
+        self.young_man = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/young_man.csv', encoding='utf-8')
+        self.young_lady = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/young_lady.csv', encoding='utf-8')
 
         # Titles from workshops (Title 7 adapted to give more information)
         self.PROTOCOL_TITLES = [
