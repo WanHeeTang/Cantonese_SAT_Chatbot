@@ -12,21 +12,11 @@ from nltk.corpus import stopwords
 
 from transformers import (
     GPT2Tokenizer,
-    GPT2LMHeadModel
-)
-
-from transformers import (
-    GPT2Tokenizer,
     GPT2LMHeadModel,
     AutoModelWithLMHead,
-    AutoTokenizer
+    AutoTokenizer,
+    BertForSequenceClassification
 )
-from tokenizers import ByteLevelBPETokenizer
-
-from tokenizers.processors import BertProcessing
-
-from transformers import BertTokenizer, BertForSequenceClassification
-from transformers import AutoModelForSequenceClassification, AutoTokenizer, XLNetForSequenceClassification
 
 emo_model = BertForSequenceClassification.from_pretrained('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Emotion Classification/BestBERTEmotion')
 emo_tokenizer = AutoTokenizer.from_pretrained('bert-base-chinese')
