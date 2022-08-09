@@ -15,26 +15,27 @@ from transformers import (
     GPT2LMHeadModel,
     AutoModelWithLMHead,
     AutoTokenizer,
-    BertForSequenceClassification
+    BertForSequenceClassification,
+    BertTokenizer,
 )
 
-emo_model = BertForSequenceClassification.from_pretrained('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Emotion Classification/BestBERTEmotion')
+emo_model = BertForSequenceClassification.from_pretrained('/home/wanhee/Cantonese_SAT_Chatbot/model/Emotion Classification/BestBERTEmotion')
 emo_tokenizer = AutoTokenizer.from_pretrained('bert-base-chinese')
 
-emp_model = BertForSequenceClassification.from_pretrained("/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Empathy Classification/MergeBertEmpathy1", num_labels=3)
+emp_model = BertForSequenceClassification.from_pretrained("/home/wanhee/Cantonese_SAT_Chatbot/model/Empathy Classification/MergeBertEmpathy1", num_labels=3)
 Emptokenizer = AutoTokenizer.from_pretrained('bert-base-chinese')
 
 
 #load emotion classifier (BestBERTEmotion.pt)
 with torch.no_grad():
     emo_model.to(torch.device('cpu'))
-    emo_model.load_state_dict(torch.load('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Emotion Classification/BestBERTEmotion/BestBERTEmotion.pt', map_location=torch.device('cpu')), strict=False)
+    emo_model.load_state_dict(torch.load('/home/wanhee/Cantonese_SAT_Chatbot/model/Emotion Classification/BestBERTEmotion/BestBERTEmotion.pt', map_location=torch.device('cpu')), strict=False)
 
 
 #load empathy classifier (BestBERTEmoathy.pt)
 with torch.no_grad():
     emp_model.to(torch.device('cpu'))
-    emp_model.load_state_dict(torch.load('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/model/Empathy Classification/MergeBertEmpathy1/BestBERTEmpathy.pt', map_location=torch.device('cpu')), strict=False)
+    emp_model.load_state_dict(torch.load('/home/wanhee/Cantonese_SAT_Chatbot/model/Empathy Classification/MergeBertEmpathy1/BestBERTEmpathy.pt', map_location=torch.device('cpu')), strict=False)
     
 
 #Load pre-trained GPT2 language model weights
