@@ -25,3 +25,5 @@ view/public/arman2.png
 "view/public/robert.png\357\200\272Zone.Identifier"
 sat_bot.pem
 sat_bot.pemZone.Identifier
+model/Emotion Classification/BestBERTEmotion
+model/Empathy Classification/MergeBertEmpathy1
