@@ -17,11 +17,11 @@ from nltk.corpus import wordnet  # noqa
 class ModelDecisionMaker:
     def __init__(self):
 
-        self.neutral = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/neutral.csv', encoding='utf-8')
-        self.old_man = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/old_man.csv', encoding='utf-8')
-        self.old_lady = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/old_lady.csv', encoding='utf-8')
-        self.young_man = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/young_man.csv', encoding='utf-8')
-        self.young_lady = pd.read_csv('/Users/Wan Hee/Documents/Academic/2021-2022/Individual Project/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/young_lady.csv', encoding='utf-8')
+        self.neutral = pd.read_csv('/home/wanhee/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/Additional Dataset/Updated_neutral.csv', encoding='utf-8')
+        self.old_man = pd.read_csv('/home/wanhee/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/Additional Dataset/updated_old_man.csv', encoding='utf-8')
+        self.old_lady = pd.read_csv('/home/wanhee/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/Additional Dataset/updated_old_lady.csv', encoding='utf-8')
+        self.young_man = pd.read_csv('/home/wanhee/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/Additional Dataset/updated_young_man.csv', encoding='utf-8')
+        self.young_lady = pd.read_csv('/home/wanhee/Cantonese_SAT_Chatbot/Dataset/Empathy Classification/Additional Dataset/updated_young_lady.csv', encoding='utf-8')
 
         # Titles from workshops (Title 7 adapted to give more information)
         self.PROTOCOL_TITLES = [
@@ -470,8 +470,7 @@ class ModelDecisionMaker:
 
             "new_protocol_same": {
                 "model_prompt": [
-                                "我很遺憾聽到你的情緒沒有任何變化。",
-                                "這種情況有時候也會發生，如果你想，我可以建議其他練習，或者會對你更有幫助。",
+                                "呢種情況有時都會發生，如果你想，我可以建議其他練習，或者會對你更有幫助。",
                                 "你想我建議其他練習嗎？"
                                 ],
 
@@ -500,7 +499,7 @@ class ModelDecisionMaker:
                 "model_prompt": lambda user_id, db_session, curr_session, app: self.get_restart_prompt(user_id),
 
                 "choices": {
-                    "open_text": lambda user_id, db_session, curr_session, app: self.determine_next_prompt_opening(user_id, app, db_session)
+                    "open_text": lambda user_id, db_session, curr_session, app: self.determine_next_prompt_restart(user_id, app, db_session)
                 },
                 "protocols": {"open_text": []},
             },
@@ -683,6 +682,26 @@ class ModelDecisionMaker:
         #self.user_emotions[user_id] = emotion
         return "guess_emotion"
 
+    def determine_next_prompt_restart(self, user_id, app, db_session):
+        user_response = self.user_choices[user_id]["choices_made"]["restart_prompt"]
+        emotion = get_emotion(user_response)
+        #emotion = np.random.choice(["Happy", "Sad", "Angry", "Anxious"]) #random choice to be replaced with emotion classifier
+        if emotion == "擔心":
+            self.guess_emotion_predictions[user_id] = "擔心"
+            self.user_emotions[user_id] = "擔心"
+        elif emotion == "唔開心":
+            self.guess_emotion_predictions[user_id] = "唔開心"
+            self.user_emotions[user_id] = "唔開心"
+        elif emotion == "嬲":
+            self.guess_emotion_predictions[user_id] = "嬲"
+            self.user_emotions[user_id] = "嬲"
+        else:
+            self.guess_emotion_predictions[user_id] = "開心"
+            self.user_emotions[user_id] ="開心"
+        #self.guess_emotion_predictions[user_id] = emotion
+        #self.user_emotions[user_id] = emotion
+        return "guess_emotion"
+
 
     def get_best_sentence(self, column, prev_qs):
         #return random.choice(column.dropna().sample(n=15).to_list()) #using random choice instead of machine learning
@@ -757,13 +776,13 @@ class ModelDecisionMaker:
     def get_model_prompt_project_emotion(self, user_id, app, db_session):
         # time.sleep(7)
         if self.chosen_personas[user_id] == "權叔":
-            prompt = "好的，謝謝！現在到了最後一樣最重要的事情，既然你認爲你是 ‘" + self.user_emotions[user_id].lower() + "’ 我希望你可以嘗試把這種情緒投射到你童年時候的自己身上。當你準備好的時候就可以按 ‘繼續’，然後我會建議一些我認爲適合你的練習。"
+            prompt = "好的，謝謝！而家到左最後一樣最重要嘅事情，既然你認爲你係 ‘" + self.user_emotions[user_id].lower() + "’ 我希望你可以嘗試將呢種情緒投射到你童年時候嘅自己身上。當你準備好嘅時候就可以㩒 ‘繼續’，然後我會建議一D我認爲適合你嘅練習。"
         elif self.chosen_personas[user_id] == "霞姨":
-            prompt = "謝謝！我將會推薦一些練習給你。在我這樣做以先，你可以試下把你 ‘" + self.user_emotions[user_id].lower() + "’ 的感覺投射到你童年時候的自己身上嗎？請慢慢嘗試，當你可以的時候就可以按 ‘繼續’。"
+            prompt = "謝謝！我將會推薦一D練習俾你。在我這樣做以先，你可以試下將你 ‘" + self.user_emotions[user_id].lower() + "’ 嘅感覺投射到你童年時候嘅自己身上嗎？請慢慢嘗試，當你可以嘅時候就可以㩒 ‘繼續’。"
         elif self.chosen_personas[user_id] == "偉文":
-            prompt = "好的，感謝你讓我知道。在我建議一些練習給你以先，請用點時間把你現在 ‘" + self.user_emotions[user_id].lower() + "’ 的感覺投射到你童年時候的自己身上。當你覺得你可以的時候就可以按 ‘繼續’。"
+            prompt = "好的，感謝你俾我知道。係我建議一D練習給你之前，請先用D時間將你而家 ‘" + self.user_emotions[user_id].lower() + "’ 嘅感覺投射到你童年時候嘅自己身上。當你覺得你可以嘅時候就可以㩒 ‘繼續’。"
         else:
-            prompt = "感謝你！在我在想哪個練習最適合你的時候，你可以慢慢地把你現在 ‘" + self.user_emotions[user_id].lower() + "’ 的情緒咁投射到你童年時候的自己身上。當你完成的時候，請按 ‘繼續’，然後我就會對你說我建議的練習。"
+            prompt = "感謝你！係我諗緊邊個練習最適合你嘅時候，你可以慢慢咁將你而家 ‘" + self.user_emotions[user_id].lower() + "’ 嘅情緒咁投射到你童年時候嘅自己身上。當你完成嘅時候，請㩒 ‘繼續’，然後我就會同你講我建議嘅練習。"
         return self.split_sentence(prompt)
 
 
