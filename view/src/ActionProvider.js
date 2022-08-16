@@ -8,7 +8,7 @@ class ActionProvider {
   }
 
 
-  // Asks for password after storing username
+  // Asks for password after storing usernameSWSS
   askForPassword = (username) => {
     this.setState((state) => ({
       ...state,

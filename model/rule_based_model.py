@@ -1,7 +1,9 @@
 import nltk
 
 from model.models import UserModelSession, Choice, UserModelRun, Protocol
-from model.classifiers import get_emotion, get_sentence_score
+# For advance dataset
+from model.classifiers_pre_compute import get_emotion, get_sentence_score
+# from model.classifiers import get_emotion, get_sentence_score
 import pandas as pd
 import numpy as np
 import random
@@ -683,6 +685,8 @@ class ModelDecisionMaker:
         return "guess_emotion"
 
     def determine_next_prompt_restart(self, user_id, app, db_session):
+        self.clear_suggestions(user_id)
+        self.remaining_choices[user_id] = ["displaying_antisocial_behaviour", "internal_persecutor_saviour", "personal_crisis", "rigid_thought"]
         user_response = self.user_choices[user_id]["choices_made"]["restart_prompt"]
         emotion = get_emotion(user_response)
         #emotion = np.random.choice(["Happy", "Sad", "Angry", "Anxious"]) #random choice to be replaced with emotion classifier
@@ -707,11 +711,12 @@ class ModelDecisionMaker:
         #return random.choice(column.dropna().sample(n=15).to_list()) #using random choice instead of machine learning
         maxscore = 0
         chosen = ''
-        for row in column.dropna().sample(n=5): #was 25
-             fitscore = get_sentence_score(row, prev_qs)
-             if fitscore > maxscore:
-                 maxscore = fitscore
-                 chosen = row
+        # for row in column.dropna().sample(n=5): #was 25
+        for row in column.dropna():
+            fitscore = get_sentence_score(row, prev_qs)
+            if fitscore > maxscore:
+                maxscore = fitscore
+                chosen = row
         if chosen != '':
             return chosen
         else:
@@ -976,7 +981,7 @@ class ModelDecisionMaker:
         else:
             self.recent_questions[user_id] = []
             self.recent_questions[user_id].append(question)
-        return ["你選擇了練習 " + str(self.current_protocol_ids[user_id][0]) + "。 ", self.split_sentence(question)]
+        return ["你揀咗練習 " + str(self.current_protocol_ids[user_id][0]) + "。 ", self.split_sentence(question)]
 
     def get_model_prompt_found_useful(self, user_id, app, db_session):
         prev_qs = pd.DataFrame(self.recent_questions[user_id],columns=['sentences'])

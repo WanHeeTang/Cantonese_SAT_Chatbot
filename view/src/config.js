@@ -9,7 +9,7 @@ import FeedbackOptions from "./widgets/options/GeneralOptions/FeedbackOptions";
 import EmotionOptions from "./widgets/options/GeneralOptions/EmotionOptions";
 import EventOptions from "./widgets/options/GeneralOptions/EventOptions";
 import YesNoProtocolOptions from "./widgets/options/GeneralOptions/YesNoProtocolsOptions";
-const botName = "SATbot";
+const botName = "CantoChatbot";
 
 const config = {
   botName: botName,
@@ -30,8 +30,8 @@ const config = {
   },
   customComponents: {
     header: () => <div style={{height: '16px', fontFamily: 'Arial', borderTopLeftRadius: '5px', borderTopRightRadius: '5px',
-    background: '#EBECED', color: '#4A4A4A', padding: '8px', borderBottom: '1px solid #B8BABA'}}>SATbot</div>,
-    botAvatar: () => <div class="react-chatbot-kit-chat-bot-avatar-container" style={{fontFamily: 'Arial'}}><p class="react-chatbot-kit-chat-bot-avatar-letter">S</p></div>
+    background: '#128c7e', color: 'white', padding: '8px', borderBottom: '1px solid #128c7e'}}>CantoChatbot</div>,
+    botAvatar: () => <div class="react-chatbot-kit-chat-bot-avatar-container" style={{fontFamily: 'Arial'}}><p class="react-chatbot-kit-chat-bot-avatar-letter">機</p></div>
   },
 
   widgets: [
