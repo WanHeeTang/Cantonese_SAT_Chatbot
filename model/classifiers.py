@@ -7,8 +7,10 @@ from torch import nn
 import torch.nn.functional as F
 import re
 import nltk
+import math
 nltk.download("stopwords")
 from nltk.corpus import stopwords
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 from transformers import (
     GPT2Tokenizer,
@@ -129,7 +131,7 @@ def repetition_penalty(sentence):
     if w not in visited:
       visited.append(w)
     else:
-      penalty += 0.01
+      penalty += 0.001
   return penalty
 
 
@@ -142,7 +144,7 @@ def fluency_score(sentence):
   penalty = repetition_penalty(sentence)
   score = (1 / ppl) - penalty
   #normalise by the highest possible fluency computed on the corpus:
-  normalised_score = score / 0.16
+  normalised_score = score / 0.36
   if normalised_score < 0:
     normalised_score = 0
   return round(normalised_score, 2)
@@ -194,6 +196,17 @@ def novelty_score(sentence, dataframe):
     score = d_score / len(d_list)
   return round(score, 2)
 
+def sentiment_score(sentence):
+  '''
+  Computes the compound of the sentiment score for each utterance
+  and the return value is normalised between 0 and 1,
+  by adding the min(-1) and divide by max(1) + min(-1)
+  '''
+  analyzer = SentimentIntensityAnalyzer()
+  sent_score = analyzer.polarity_scores(sentence)
+  sent_score = (sent_score["compound"] + 1 ) / (1 + 1)
+  return sent_score
+
 
 def get_sentence_score(sentence, dataframe):
   '''
@@ -201,7 +214,9 @@ def get_sentence_score(sentence, dataframe):
   and novelty values
   '''
   empathy = empathy_score(sentence)
-  fluency = fluency_score(sentence)
+  fluency = (math.log(fluency_score(sentence)) + 5) / 5
   novelty = novelty_score(sentence, dataframe)
-  score = empathy + 0.75*fluency + 2*novelty
+  sentiment = (math.log(1 - sentiment_score(sentence) + 0.00001) + 6) / 6
+  score = 1.5*empathy + fluency + 2*novelty + sentiment
+
   return score

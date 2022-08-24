@@ -68,7 +68,7 @@ class ModelDecisionMaker:
 
         self.INTERNAL_PERSECUTOR_PROTOCOLS = [
             self.PROTOCOL_TITLES[8],
-            self.PROTOCOL_TITLES[11],
+            self.PROTOCOL_TITLES[13],
             self.PROTOCOL_TITLES[16],
             self.PROTOCOL_TITLES[19],
         ]
@@ -545,7 +545,7 @@ class ModelDecisionMaker:
             suggestions = set(suggestions)
             suggestions = list(suggestions)
         while len(suggestions) < 4: #augment the suggestions if less than 4, we add random ones avoiding repetitions
-            p = random.choice([i for i in range(1,20) if i not in [6,11]]) #we dont want to suggest protocol 6 or 11 at random here
+            p = random.choice([i for i in range(1,20) if i not in [6,13]]) #Update! we dont want to suggest protocol 6 or 13 at random here
             if (any(self.PROTOCOL_TITLES[p] not in curr_suggestions for curr_suggestions in list(self.suggestions[user_id]))
                 and self.PROTOCOL_TITLES[p] not in self.recent_protocols and self.PROTOCOL_TITLES[p] not in suggestions):
                         suggestions.append(self.PROTOCOL_TITLES[p])
@@ -713,6 +713,7 @@ class ModelDecisionMaker:
         chosen = ''
         # for row in column.dropna().sample(n=5): #was 25
         for row in column.dropna():
+            # print(row)
             fitscore = get_sentence_score(row, prev_qs)
             if fitscore > maxscore:
                 maxscore = fitscore
@@ -872,7 +873,7 @@ class ModelDecisionMaker:
     def get_model_prompt_revisit_recent(self, user_id, app, db_session):
         prev_qs = pd.DataFrame(self.recent_questions[user_id],columns=['sentences'])
         data = self.datasets[user_id]
-        base_prompt = self.user_emotions[user_id] + "- 你最近是否嘗試過練習11，並發現由於舊事件而重新點燃了無法控制的情緒？"
+        base_prompt = self.user_emotions[user_id] + "- 你最近是否嘗試過練習13，並發現由於舊事件而重新點燃了無法控制的情緒？"
         column = data[base_prompt].dropna()
         question = self.get_best_sentence(column, prev_qs)
         if len(self.recent_questions[user_id]) < 50:

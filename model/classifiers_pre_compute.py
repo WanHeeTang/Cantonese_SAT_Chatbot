@@ -8,6 +8,7 @@ import torch.nn.functional as F
 import re
 import nltk
 import pandas as pd
+import math
 nltk.download("stopwords")
 from nltk.corpus import stopwords
 
@@ -121,19 +122,32 @@ def novelty_score(sentence, dataframe):
 
     
     
+# def get_sentence_score(sentence, dataframe):
+#     '''
+#     Calculates how fit a sentence is based on its weighted empathy, fluency
+#     and novelty values
+#     '''
+#     tmp_df = df[df["response"]==sentence]
+#     tmp = tmp_df.iloc[0]
+#     empathy = float(tmp.empathy_score)
+#     fluency = float(tmp.fluency_score)
+#     novelty = novelty_score(sentence, dataframe)
+#     sentiment = float(tmp.sentiment_score)
+#     score = 1.5*empathy + fluency + 2*novelty +0.3*sentiment
+#     return score
+
 def get_sentence_score(sentence, dataframe):
-    '''
-    Calculates how fit a sentence is based on its weighted empathy, fluency
-    and novelty values
-    '''
-    tmp_df = df[df["response"]==sentence]
-    print(tmp_df.iloc[0])
-    # print(tmp_df.empathy_score)
-    # print(tmp_df.fluency_score)
-    tmp = tmp_df.iloc[0]
-    empathy = float(tmp.empathy_score)
-    fluency = float(tmp.fluency_score)
-    novelty = novelty_score(sentence, dataframe)
-    sentiment = float(tmp.sentiment_score)
-    score = 1.5*empathy + fluency + 2*novelty +0.5*sentiment
-    return score
+  '''
+  Calculates how fit a sentence is based on its weighted empathy, fluency
+  and novelty values
+  '''
+  tmp_df = df[df["response"]==sentence]
+  tmp = tmp_df.iloc[0]
+  print(tmp)
+  empathy = float(tmp.empathy_score)
+  fluency = (math.log(float(tmp.fluency_score)) + 5) / 5
+  novelty = novelty_score(sentence, dataframe)
+  sentiment = (math.log(1 - float(tmp.sentiment_score) + 0.00001) + 6) / 6
+  score = 2*empathy + fluency + 1.5*novelty + sentiment
+
+  return score

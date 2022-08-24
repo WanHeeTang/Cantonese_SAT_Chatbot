@@ -89,3 +89,4 @@ urllib3==1.26.9
 watchdog==2.1.8
 Werkzeug==2.0.1
 zipp==3.8.0
+vaderSentiment
