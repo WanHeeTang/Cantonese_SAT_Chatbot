@@ -10,8 +10,8 @@ More instructions at: https://python.land/virtual-environments/virtualenv
 To activate venv, do `source venv_folder_location/bin/activate `
 and to deactivate do `deactivate`
 
-You will need to install libraries using ``` python3 -m pip install -r requirements.txt ```
-or ``` pip install -r requirements.txt ```
+You will need to install libraries using ``` python3 -m pip install -r requirements5.txt ```
+or ``` pip install -r requirements5.txt ```
 
 To set up a database you can use the following commands:
 ```

@@ -166,7 +166,9 @@ def get_distance(s1, s2):
   for i in range(1, max_n+1):
     s1grams = nltk.ngrams(s1.split(), i)
     s2grams = nltk.ngrams(s2.split(), i)
-    ngram_scores.append((td.overlap.normalized_distance(s1grams, s2grams))**i) #we normalize the distance score to be a value between 0 and 10, before raising to i
+    # ngram_scores.append((td.overlap.normalized_distance(s1grams, s2grams))**i) #we normalize the distance score to be a value between 0 and 10, before raising to i
+    ngram_scores.append((td.overlap.normalized_distance(s1grams, s2grams))) #we normalize the distance score to be a value between 0 and 10, before raising to i
+
   normalised_dis = sum(ngram_scores)/(max_n) #normalised
   return normalised_dis
 
