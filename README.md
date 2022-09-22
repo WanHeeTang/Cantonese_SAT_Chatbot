@@ -4,5 +4,5 @@
 
 2. <i>model:</i> contains Jupyter notebooks for training and testing the emotion and empathy classifiers
 
-3. <i>view:</i> contains the implementation files of the chatbot web app. Back-end and front-end can be run locally by following the instructions in the README
+3. <i>view:</i> contains the implementation files of the chatbot web app. Back-end and front-end can be run locally by following the instructions in the README.
 
